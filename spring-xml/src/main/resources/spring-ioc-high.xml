@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--    depends-on 控制加载顺序 可使用逗号设施多个-->
+    <!--    <bean class="com.tuling.beans.User" id="user" depends-on="wife"/>-->
+    <!--    <bean class="com.tuling.beans.Wife" id="wife"/>-->
+
+    <!--    lazy-init懒加载-->
+    <!--    <bean class="com.tuling.beans.Wife" id="wife" lazy-init="true"/>-->
+
+    <!--    作用域-->
+    <!--    单例，原型（多例,懒加载）-->
+    <!--    <bean class="com.tuling.beans.Person" id="person" scope="prototype"/>-->
+
+    <!--    干预bean的实例化-->
+    <!--    工厂方法实例化bean-->
+    <!--    静态工厂-->
+    <!--    <bean class="com.tuling.beans.Person" id="person" factory-method="createPersonFactory"/>-->
+    <!--    实例工厂-->
+    <!--    <bean class="com.tuling.beans.PersonFactory" id="personFactory"/>-->
+    <!--    <bean class="com.tuling.beans.Person" id="person" factory-bean="personFactory"-->
+    <!--          factory-method="createPersonFactoryMethod"/>-->
+
+
+    <!--    自动注入-->
+    <!--    byType 根据类型自动匹配-->
+    <!--    byName 根据set方法的名字去匹配-->
+    <!--    constructor 根据构造器匹配,优先参数名字，
+    未匹配则按照类型(
+    多个同类型则不注入,可设置primary=true则正常注入，不参与注入的 可设置autowire-candidate=false,与byType通用规则)，
+    构造函数参数AB要完整匹配AB同时存在才注入-->
+    <!--    <bean class="com.tuling.beans.Person" id="person" autowire="constructor"/>-->
+    <!--    <bean class="com.tuling.beans.Wife" id="wife1">-->
+    <!--        <property name="name" value="adi"/>-->
+    <!--    </bean>-->
+    <!--    <bean class="com.tuling.beans.Wife" id="wife2" autowire-candidate="false">-->
+    <!--        <property name="name" value="adiaa"/>-->
+    <!--    </bean>-->
+
+    <!--    bean的生命周期回掉-->
+    <!--    实现回调接口-->
+    <!--    <bean class="com.tuling.beans.Person" id="person" init-method="personByConfig" destroy-method="personByConfig"/>-->
+
+
+    <!--    管理第三方bean-->
+
+    <!--    <bean class="com.alibaba.druid.pool.DruidDataSource" id="dataSource">-->
+    <!--        <property name="username" value="${mysql.username}"/>-->
+    <!--        <property name="password" value="${mysql.password}"/>-->
+    <!--        <property name="url" value="${mysql.url}"/>-->
+    <!--        <property name="driverClassName" value="${mysql.driverClassName}"/>-->
+    <!--    </bean>-->
+
+    <!--    引入外部属性资源文件从配置文件获取，需要命名空间-->
+    <!--    <context:property-placeholder location="db.properties" />-->
+
+
+    <!--    SpEL 表达式-->
+    <bean class="com.tuling.beans.Person" id="person">
+        <property name="id" value="#{1+3}"/>
+        <property name="wife" value="#{wife}" />
+        <property name="name" value="#{wife.name}" />
+        <property name="gender" value="#{wife.getName()}" />
+        <property name="birthday" value="#{T(com.tuling.beans.PersonFactory).getNowDate()}" />
+
+    </bean>
+    <bean class="com.tuling.beans.Wife" id="wife" >
+        <property name="name" value="ali"/>
+    </bean>
+</beans>
